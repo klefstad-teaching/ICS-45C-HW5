@@ -36,68 +36,55 @@ git clone git@github.com:klefstad-teaching/ics-45c-hw5-<YourGitHubUserName>.git 
     └── string.hpp
 ```
 
-Overview and Objectives
-For Homework 5, class String is implemented as a singly-linked list of characters, rather than the dynamically allocated arrays in Homework 4. Class String is now supported by a namespace called list which contains class Node and singly-linked list helper functions.
+## Overview and Objectives
 
+For Homework 5, class `String` is implemented as a ***singly-linked list*** of characters, rather than the dynamically allocated arrays in Homework 4. Class `String` is now supported by a **namespace** called `list` which contains class `Node` and singly-linked list helper functions.
 
-Singly-linked lists use memory storage proportional to the number of characters in the string—no more and no less. Strings have varying lengths, and the singly-linked list which stores them is the same length as the number of characters in this String object. (Note that there is no null terminating character needed in linked lists! Use the nullptr to indicate the end of the linked list.)
+Singly-linked lists use memory storage proportional to the number of characters in the string—no more and no less. Strings have varying lengths, and the singly-linked list which stores them is the same length as the number of characters in this `String` object. (Note that there is no null terminating character needed in linked lists! Use the `nullptr` to indicate the end of the linked list.)
 
+> Note: For the remainder of these instructions, the term "linked list" will refer to the singly-linked list data structure (as opposed to doubly-linked list, or other more complex linked lists).
 
-Note: For the remainder of these instructions, the term “linked list” will refer to the singly-linked list data structure (as opposed to doubly-linked list, or other more complex linked lists).
+The length of the linked list must change with operations such as concatenation, assignment, or `read()`. The static helper functions from Homework 3 or Homework 4 will no longer work with linked lists, so a new set of helper methods are implemented for Homework 5, with similar names and behaviors.
 
+We create a new **namespace**, called `list`, to hold our definition of a helper class named `Node`, as all the helper functions needed to implement the methods of class `String`. A namespace is a convenient way of grouping classes, functions, and variables into a common scope without using a class full of static members. From outside the namespace, you must use `list::Node`, `list::reverse`, etc. to refer to the members of the namespace. From inside the namespace, you can leave out the `list::` prefix.
 
-The length of the linked list must change with operations such as concatenation, assignment, or read(). The static helper functions from Homework 3 or Homework 4 will no longer work with linked lists, so a new set of helper methods are implemented for Homework 5, with similar names and behaviors.
+## Relation to Course Objectives
 
-
-We create a new namespace, called list, to hold our definition of a helper class named Node, as all the helper functions needed to implement the methods of class String. A namespace is a convenient way of grouping classes, functions, and variables into a common scope without using a class full of static members. From outside the namespace, you must use list::Node, list::reverse, etc. to refer to the members of the namespace. From inside the namespace, you can leave out the list:: prefix.
-
-
-Relation to Course Objectives
-
-
-Proficiency in implementing linked lists efficiently—a core prerequisite skill for ICS46 and above.  You learn how to implement (and debug) linked lists without memory leaks or other memory errors, and become more skilled at test-driven development.
-
+**Proficiency in implementing linked lists efficiently—a core prerequisite skill for ICS46 and above.** You learn how to implement (and debug) linked lists without memory leaks or other memory errors, and become more skilled at test-driven development.
 
 Like arrays, the linked list is a fundamental data structure in C++, and implementing it correctly and efficiently is tricky. You will implement linked lists three times in this course, to help you gain proficiency and fluency, essential to build upon in Data Structures (ICS 46) and many other upper-division classes. Linked list processing is also (in?)famously part of many technical job interviews.
 
-
 Through the progression of Homeworks 3, 4, and 5, you also see an example of how a class’s interface can be separated from its implementation, and understand how a class’s underlying implementation can change while its interface remains the same.
 
+Lastly, you will learn about more features of C++ such as namespaces, and the C++20 way to implement comparisons with less code duplication, the **spaceship operator**.
 
-Lastly, you will learn about more features of C++ such as namespaces, and the C++20 way to implement comparisons with less code duplication, the spaceship operator.
+## Organization of Classes and Files
 
-Organization of Classes and Files
-→ Be sure to use exactly the names given in these instructions and in the GitHub branch for hw5 for files, functions, and classes, because the autograder will be expecting exactly those names.
+> Be sure to use **exactly** the names given in these instructions and in this repo for **files**, **functions**, and **classes**, because the autograder will be expecting exactly those names.
 
+> ⚠️ **Make sure your `#includes` and `using` match exactly what is given in the screenshots**, for the autograder to run your submission with our own test programs. *Note that if there are errors in these files (typos, omissions, misspellings, or #include problems), your program may not compile and link.*
 
-⚠️ Make sure your #includes and using match exactly what is given in the screenshots, for the autograder to run your submission with our own test programs. Note that if there are errors in these files (typos, omissions, misspellings, or #include problems), your program may not compile and link.
+## 1 class String
 
-1 class String
+None of the static C-string helper methods from Homework 4’s class `String` can be reused to implement linked lists. **Instead, all helper functions are now defined in a new namespace named `list` defined in the two files `list.hpp` and `list.cpp`.**
 
-None of the static C-string helper methods from Homework 4’s class String can be reused to implement linked lists. Instead, all helper functions are now defined in a new namespace named list defined in the two files list.hpp and list.cpp.
+The methods of class `String` **must never** call `new` or `delete` directly. They must call `list` helper functions instead. (`list` helper functions ***will*** call `new` and `delete` directly.)
 
-
-The methods of class String must never call new or delete directly. They must call list helper functions instead. (list helper functions will call new and delete directly.)
-
-
-Class String will now have only one data member named head, of type pointer to a list::Node. A String object whose value is the empty String has a head that contains the value nullptr.
-
+Class `String` will now have only one data member named `head`, of type pointer to a `list::Node`. A `String` object whose value is the empty String has a `head` that contains the value `nullptr`.
 
 Other than that, three other small changes have been made to the interface:
 
+1. There is only the const-version of `operator[]` now, and it returns `char` instead of `const char&`. Otherwise, there is no reasonable thing to return in the case of an empty `String`. **Also, indexing into a list is a slow operation - don't use it in a loop!**
+2. The private constructor takes a `list::Node*` argument instead of an `int`. You will once again find this useful for `operator+` and `reverse`. This constructor should simply set `head` to the given `list::Node*`. **It does not allocate anything.**
+3. The six comparison operators (`==`, `!=`, `<=`, `<`, `>`, `>=`) have been replaced by just two (`==`, `<=>`). This change is explained further below.
 
-There is only the const-version of operator[] now, and it returns char instead of const char&. Otherwise, there is no reasonable thing to return in the case of an empty String. Also, indexing into a list is a slow operation - don't use it in a loop!
-The private constructor takes a list::Node* argument instead of an int. You will once again find this useful for operator+ and reverse. This constructor should simply set head to the given list::Node*. It does not allocate anything.
-The six comparison operators (==, !=, <=, <, >, >=) have been replaced by just two (==, <=>). This change is explained further below.
+> **No other data members may be added to class `String`.**
 
-→ No other data members may be added to class String.
+## 1.1 Implementing comparisons with the spaceship operator
 
-1.1 Implementing comparisons with the spaceship operator
 In Homeworks 3 and 4 you implemented six different comparison operators (==, !=, <=, <, >, >=) for class String, all of which used almost the same code. In this homework, you will see a more modern and convenient way of defining comparisons that was introduced in C++20.
 
-
 First, you will implement String::operator== as before using list::compare instead of String::strcmp. The compiler will then effectively define String::operator!= for you by just negating your String::operator==.
-
 
 Next, you will implement four ordered comparisons (<=, <, >, >=) by defining String::operator<=>, which is also known as the spaceship operator. The spaceship operator does not return a bool; instead it returns a special value that directly describes the ordering of its arguments. For example:
 
