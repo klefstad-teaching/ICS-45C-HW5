@@ -19,7 +19,6 @@ git clone git@github.com:klefstad-teaching/ics-45c-hw5-<YourGitHubUserName>.git 
 ## Directory Structure
 
 ```bash
-.
 ├── CMakeLists.txt
 ├── CMakePresets.json
 ├── gtest
@@ -163,26 +162,31 @@ Follow the general approach below to make debugging more successful and minimize
 
 ### Convert class String to use list::Node (linked lists of char)
 
-2. Write most* of the methods of class String to change its representation to use a list::Node. *Do not yet define destructor, move constructor, or move assignment—to make it much easier to debug the others. This means fully comment out these methods so they do not get called with empty definitions which will likely result in fatal errors.
-3. Add test functions in string_gtests.cpp for each feature. Add only one test at a time, starting with creating a single String object from a C-string literal, then print out the String object and/or check its size. Debug that first test until you are convinced it is correct, and then proceed to the next test. For now, have the destructor doing nothing, which will result in many memory leaks, but will allow you to get your program otherwise functioning correctly. Once you have all of those test functions in student_gtests.cpp working, then define your destructor for class String to call list::free(head).
+2. Write **most*** of the methods of class `String` to change its representation to use a `list::Node`. ***Do not yet define** destructor, move constructor, or move assignment—to make it much easier to debug the others. **This means fully comment out these methods so they do not get called with empty definitions which will likely result in fatal errors.**
+
+3. Add test functions in `string_gtests.cpp` for each feature. Add only one test at a time, starting with creating a single `String` object from a C-string literal, then print out the `String` object and/or check its size. Debug that first test until you are convinced it is correct, and then proceed to the next test. For now, have the destructor doing nothing, which will result in many memory leaks, but will allow you to get your program otherwise functioning correctly. Once you have all of those test functions in `student_gtests.cpp` working, then define your destructor for class `String` to call `list::free(head)`.
+
 4. Cross your fingers and pray. 🙏
-5. Run student_gtests with sanitizers or valgrind. Any time you allocate heap storage with new, always run with sanitizers or valgrind to help you catch memory- and pointer-related errors, which the C++ compiler will not catch for you. The default preset uses the sanitizers. To run with valgrind, you can use
-cmake --preset valgrind
+
+5. Run `student_gtests` with `sanitizers` or `valgrind`. Any time you allocate heap storage with `new`, always run with `sanitizers` or `valgrind` to help you catch memory- and pointer-related errors, which the C++ compiler will not catch for you. The default preset uses the `sanitizers`. To run with valgrind, you can use
+
+    `cmake --preset valgrind`
 
 to create a separate build_valgrind folder. You can compile into that folder with
 
-cmake --build build_valgrind
+    `cmake --build build_valgrind`
 
 and run programs with
 
-valgrind build_valgrind/standard_main.
+    `valgrind build_valgrind/standard_main.`
 
-Once the rest of your program is functioning correctly, define the move constructor, compile and run, test until it works.
-Define the move assignment operator, compile and run, test until it works.
+7. Once the rest of your program is functioning correctly, define the move constructor, compile and run, test until it works.
+
+8. Define the move assignment operator, compile and run, test until it works.
 
 ## How to Submit and Grade the programs
 
-In GradeScope for Homework 5, submit the files from GitHub hw5:
+In **GradeScope** for **Homework 5**, submit the files from GitHub hw5:
 
 - `string.hpp`
 - `string.cpp`
@@ -197,20 +201,20 @@ In GradeScope for Homework 5, submit the files from GitHub hw5:
 
 Points are allotted for
 
-The quality of your tests of the list:: functions in student_gtests.cpp.
-Preventing memory leaks. Major points are deducted for mismatched new and delete and other memory errors detected by sanitizer.
-Passing tests of functional correctness of list::Node functions.
-Passing tests of functional correctness of String public methods.
-Reducing excessive memory allocations by thoughtful, correct allocation-reducing techniques.
+- **The quality of your tests of the `list::` functions in `student_gtests.cpp`.**
+- Preventing memory leaks. **Major points** are deducted for mismatched `new` and `delete` and other memory errors detected by `sanitizer`.
+- Passing tests of functional correctness of `list::Node` functions.
+- Passing tests of functional correctness of `String` public methods.
+- Reducing excessive memory allocations by thoughtful, correct allocation-reducing techniques.
 
-The autograder must compile and run your code, so if your code does not compile on Linux, the autograder cannot run your program to award you any points. Your score will be 0. Failure to compile can also result from errors in your #includes or errors/typos/mismatches in your .hpp and .cpp class files. You must fix these errors in order to receive a score.
+The autograder must compile and run your code, so if your code does not compile **on Linux**, the autograder cannot run your program to award you any points. Your score will be 0. Failure to compile can also result from errors in your `#includes` or errors/typos/mismatches in your `.hpp` and `.cpp` class files. You must fix these errors in order to receive a score.
 
 Error message such as
-
-standard_main failed to build/run properly
-This message only appears if the script broke, please contact the staff
-Segmentation fault
-usually indicate that there are one or more fatal error(s) somewhere in your class String or namespace list functions that you must test and debug before submitting. “Script broke” means the memory error (segfault) crashed the program, so the autograder could not even continue to run.
+- `standard_main failed to build/run properly`
+- `This message only appears if the script broke, please contact the staff`
+- `Segmentation fault`
+  
+usually indicate that there are one or more fatal error(s) somewhere in your class `String` or namespace `list` functions that you must test and debug before submitting. *"Script broke"* means the memory error (segfault) crashed the program, so the autograder could not even continue to run.
 
 We may adjust grades manually when warranted. For example, a submission that attempts to defraud the autograder points by not implementing the requirements may be given a 0.
 
