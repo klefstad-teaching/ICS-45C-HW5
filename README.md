@@ -73,7 +73,7 @@ Class `String` will now have only one data member named `head`, of type pointer 
 
 Other than that, three other small changes have been made to the interface:
 
-1. There is only the const-version of `operator[]` now, and it returns `char` instead of `const char&`. Otherwise, there is no reasonable thing to return in the case of an empty `String`. **Also, indexing into a list is a slow operation - don't use it in a loop!**
+1. There is only the `const` version of `operator[]` now, and it returns `char` instead of `const char&`. Otherwise, there is no reasonable thing to return in the case of an empty `String`. **Also, indexing into a list is a slow operation - don't use it in a loop!**
 2. The private constructor takes a `list::Node*` argument instead of an `int`. You will once again find this useful for `operator+` and `reverse`. This constructor should simply set `head` to the given `list::Node*`. **It does not allocate anything.**
 3. The six comparison operators (`==`, `!=`, `<=`, `<`, `>`, `>=`) have been replaced by just two (`==`, `<=>`). This change is explained further below.
 
@@ -81,11 +81,11 @@ Other than that, three other small changes have been made to the interface:
 
 ## 1.1 Implementing comparisons with the spaceship operator
 
-In Homeworks 3 and 4 you implemented six different comparison operators (`==`, `!=`, `<=`, `<`, `>`, `>=`) for class `String`, all of which used almost the same code. In this homework, you will see a more modern and convenient way of defining comparisons that was introduced in C++20.
+In Homeworks 3 and 4 you implemented six different comparison operators (`==`, `!=`, `<=`, `<`, `>`, `>=`) for class `String`, all of which used almost the same code. In this Homework, you will see a more modern and convenient way of defining comparisons introduced in C++20.
 
-First, you will implement `String::operator==` as before using `list::compare` instead of `String::strcmp`. The compiler will then effectively define `String::operator!=` for you by just negating your `String::operator==`.
+First, you will implement `String::operator==` as before, using `list::compare` instead of `String::strcmp`. The compiler will then effectively define `String::operator!=` for you by just negating your `String::operator==`.
 
-Next, you will implement four ordered comparisons (`<=`, `<`, `>`, `>=`) by defining `String::operator<=>`, which is also known as the spaceship operator. The spaceship operator does not return a `bool`; instead it returns a special value that directly describes the ordering of its arguments. For example:
+Next, you will implement four ordered comparisons (`<=`, `<`, `>`, `>=`) by defining `String::operator<=>`, which is also known as the ***spaceship operator***. The spaceship operator does not return a `bool`; instead it returns a special value that directly describes the ordering of its arguments. For example:
 
 - `3 <=> 5` returns the value `strong_ordering::less` meaning "3 is less than 5",
 - `10 <=> -5` returns `strong_ordering::greater`, and
@@ -104,13 +104,13 @@ String.hpp screenshot
 
 ## 2 list.hpp and class list::Node
 
-Class `list::Node` defines a single link, or node, in a linked list of nodes containing characters. namespace `list` holds helper functions that are used by the public methods of class `String` to implement class `String` as a linked list of characters. The algorithms from Homework 3 & 4 helper functions may be reused, but the details of traversing must change to traverse a linked list.
+Class `list::Node` defines a single link, or node, in a linked list of nodes containing characters. Namespace `list` holds helper functions that are used by the public methods of class `String` to implement class `String` as a linked list of characters. The algorithms from Homework 3 & 4 helper functions may be reused, but the details of traversing must change to traverse a linked list.
 
 `list::Nodes` are dynamically allocated using `new` and deallocated using `delete`. new allocates a single object, and `delete` deletes a single object. *(Note that there are **no brackets!** Brackets indicate an array of objects in contiguous storage. Never confuse them!)*
 
-    `Node *p = new Node{'A', nullptr};` allocates `new` storage for a single Node initializing data to 'A' and `next` to `nullptr`, and returns the address which is saved in the pointer variable P. Use the curly braces around the initial values for `data` and `next` whenever you create a new `list::Node`. Since C++ 20 you can also use the more explicit syntax `Node *p = new Node {.data = 'A', .next = nullptr};` to make it more clear which field is getting what value.
+    `Node *p = new Node{'A', nullptr};` allocates `new` storage for a single Node initializing data to 'A' and `next` to `nullptr`, and returns the address which is saved in the pointer variable P. Use the curly braces around the initial values for `data` and `next` whenever you create a new `list::Node`. Since C++ 20, you can also use the more explicit syntax `Node *p = new Node {.data = 'A', .next = nullptr};` to make it more clear which field is getting what value.
 
-    `delete p;` frees the storage, where p is a pointer that holds the address of a `list::Node` to deallocate
+    `delete p;` frees the storage, where `p` is a pointer that holds the address of a `list::Node` to deallocate.
 
 Only the helper functions in namespace `list` may call `new` or `delete`. We continue to use `alloc.hpp` and `alloc.cpp` from Homework 4 to track allocations for us, described below.
 
@@ -180,9 +180,9 @@ and run programs with
 
     `valgrind build_valgrind/standard_main.`
 
-7. Once the rest of your program is functioning correctly, define the move constructor, compile and run, test until it works.
+6. Once the rest of your program is functioning correctly, define the move constructor, compile and run, test until it works.
 
-8. Define the move assignment operator, compile and run, test until it works.
+7. Define the move assignment operator, compile and run, test until it works.
 
 ## How to Submit and Grade the programs
 
