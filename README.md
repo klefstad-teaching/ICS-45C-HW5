@@ -146,9 +146,9 @@ In `student_gtests.cpp`, **fully test and debug** your implementation of the **n
 
 Use `standard_main.cpp` and `string_gtests.cpp` to test and debug the implementation of the **public methods of class** `String`. By now, you should have a good collection of tests.
 
-If you get a segfault, the only way to debug it is by running your `standard_main`, `string_gtests`, or `student_gtests` with gdb to reveal the bug.
+If you get a segfault, the only way to debug it is by running your `standard_main`, `string_gtests`, or `student_gtests` with gdb or your preferred debugger to reveal the bug.
 
-If your program runs fine under your tests, but fails with the autograder, that is because the autograder’s test program revealed bugs that your tests did not reveal to you. For example, if your operator + fails on the autograder, but not under your tests, you must add test cases to reveal the cause of the segfault. Then you can use gdb to show you exactly what instruction causes the segfault.
+If your program runs fine under your tests, but fails with the autograder, that is because the autograder’s test program revealed bugs that your tests did not reveal to you. For example, if your operator + fails on the autograder, but not under your tests, you must add test cases to reveal the cause of the segfault. Then you can use the debugger to show you exactly what instruction causes the segfault.
 
 At the end of `standard_main.cpp`, in `main()`, you must use an `AllocationTracker` object to track and report your allocations.
 
